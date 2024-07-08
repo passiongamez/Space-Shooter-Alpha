@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
     private float xBound = 11.3f;
-    private Vector3 _offset = new Vector3(-0, 1f, 0);
+    private Vector3 _offset = new Vector3(0, 1f, 0);
 
     [SerializeField] float _fireRate = 0.2f;
     float _canFire = -1f;
