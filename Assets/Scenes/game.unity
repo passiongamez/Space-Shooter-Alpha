@@ -200,7 +200,7 @@ Transform:
   m_LocalScale: {x: 1.0864081, y: 1.1764951, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -292,8 +292,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &798656923 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4792800349396663721, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1210171414006104870}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,6 +415,10 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 4910560335015276570, guid: e4c884c674293c44196901c63fcf5ac8,
     type: 3}
   _enemyContainer: {fileID: 1659575826}
+  _powerUps:
+  - {fileID: 3834367026159185394, guid: 3e239152aa140e943a196be22398648c, type: 3}
+  - {fileID: 5035065863195819925, guid: 5524ce4b59b938c46bb98c3ba022d42d, type: 3}
+  - {fileID: 6333425031573406623, guid: 413039fb2457e9941a0c87e23a0648f9, type: 3}
 --- !u!4 &1471831640
 Transform:
   m_ObjectHideFlags: 0
@@ -422,7 +432,7 @@ Transform:
   m_Children:
   - {fileID: 1659575827}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1659575826
 GameObject:
@@ -464,7 +474,7 @@ PrefabInstance:
     - target: {fileID: 1210171414015521747, guid: e772b9fabd083e74fb0f1b5198af4cf8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1210171414015521747, guid: e772b9fabd083e74fb0f1b5198af4cf8,
         type: 3}
@@ -520,6 +530,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1210171414015521749, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+        type: 3}
+      propertyPath: _shield
+      value: 
+      objectReference: {fileID: 798656923}
+    - target: {fileID: 4792800349396663721, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074640408925493569, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074640408925493569, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074640408925493569, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1394843781
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e772b9fabd083e74fb0f1b5198af4cf8, type: 3}

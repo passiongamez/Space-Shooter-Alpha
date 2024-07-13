@@ -16,11 +16,12 @@ public class Enemy : MonoBehaviour
     
     void Update()
     {
-        float _randomX = Random.Range(-9.4f, 9.4f);
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
         if(transform.position.y < -6)
         {
+            float _randomX = Random.Range(-9.4f, 9.4f);
+
             transform.position = new Vector3(_randomX, 8, 0);
         }
     }
