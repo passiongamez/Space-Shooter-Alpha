@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float _speed = 5f;
-    float _speedBoostMultiplier = 3f;
+    float _speedBoostMultiplier = 2f;
 
     private float _xBound = 11.3f;
     private Vector3 _offset = new Vector3(0, 1f, 0);
@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     float _canFire = -1f;
 
     [SerializeField] int _lives = 3;
+    int _score;
 
     [SerializeField] GameObject _laserPrefab;
     [SerializeField] GameObject _tripleShotPrefab;
@@ -26,6 +27,8 @@ public class Player : MonoBehaviour
     WaitForSeconds _powerUpCoolDownTimer = new WaitForSeconds(5f);
 
     SpawnManager _spawnManager;
+    UIManager _uiManager;
+    GameManager _gameManager;
 
 
     void Start()
@@ -36,6 +39,15 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Spawn manager is null");
         }
+
+        _uiManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
+
+        if(_uiManager == null)
+        {
+            Debug.LogError("Ui manager is null");
+        }
+
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
 
@@ -96,10 +108,12 @@ public class Player : MonoBehaviour
         else
         {
             _lives--;
+            _uiManager.UpdateLives(_lives);
         }
 
         if (_lives < 1)
         {
+            _gameManager.GameOver();
             _spawnManager.OnPlayerDeath();
             Destroy(gameObject);
         }
@@ -135,5 +149,11 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         _shield.SetActive(true);
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 }

@@ -1,0 +1,80 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+
+public class UIManager : MonoBehaviour
+{
+    [SerializeField] Text _scoreText;
+    [SerializeField] Text _gameOver;
+    [SerializeField] Text _restartText;
+
+    [SerializeField] Image _livesIMG;
+
+    [SerializeField] Sprite[] _livesDisplay;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        _restartText.gameObject.SetActive(false);
+
+        if(_restartText == null)
+        {
+            Debug.LogError("Restart is null");
+        }
+
+        _gameOver.enabled = false;
+
+        if(_gameOver == null)
+        {
+            Debug.LogError("gameover is null");
+        }
+
+        _scoreText.text = "Score: " + 0;
+
+        if(_scoreText == null)
+        {
+            Debug.LogError("Score text is null");
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void UpdateScore(int playerScore)
+    {
+        _scoreText.text = "Score: " + playerScore;
+    }
+
+    public void UpdateLives(int currentLives)
+    {
+        _livesIMG.sprite = _livesDisplay[currentLives];
+
+        if (currentLives == 0)
+        {
+            GameOverSequence();
+        }
+    }
+
+    void GameOverSequence()
+    {
+        StartCoroutine(GameOverFlicker());
+        _restartText.gameObject.SetActive(true);
+    }
+
+    IEnumerator GameOverFlicker()
+    {
+        while (true)
+        {
+            _gameOver.enabled = true;
+            yield return new WaitForSeconds(.5f);
+            _gameOver.enabled = false;
+            yield return new WaitForSeconds(.5f);
+        }
+    }
+}
