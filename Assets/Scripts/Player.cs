@@ -15,10 +15,13 @@ public class Player : MonoBehaviour
 
     [SerializeField] int _lives = 3;
     int _score;
+   
 
     [SerializeField] GameObject _laserPrefab;
     [SerializeField] GameObject _tripleShotPrefab;
     [SerializeField] GameObject _shield;
+    [SerializeField]
+    GameObject[] _damageEffect;
 
     [SerializeField] bool _isTripeShotActive = false;
     [SerializeField] bool _isSpeedBoosted = false;
@@ -109,6 +112,19 @@ public class Player : MonoBehaviour
         {
             _lives--;
             _uiManager.UpdateLives(_lives);
+            if(_lives == 2)
+            {
+                _damageEffect[Random.Range(0, 2)].SetActive(true);
+            }
+
+            if(_lives == 1 && _damageEffect[0].activeInHierarchy)
+            {
+                _damageEffect[1].SetActive(true);
+            }
+            else if(_lives == 1 && _damageEffect[1].activeInHierarchy)
+            {
+                _damageEffect[0].SetActive(true);
+            }
         }
 
         if (_lives < 1)

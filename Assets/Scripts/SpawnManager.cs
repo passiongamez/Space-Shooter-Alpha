@@ -16,30 +16,16 @@ public class SpawnManager : MonoBehaviour
 
    
 
-    void Start()
+    public void StartSpawning()
     {
         StartCoroutine(SpawnEnemies());
         StartCoroutine(SpawnPowerUps());
-
-        if(_enemyContainer == null)
-        {
-            Debug.LogError("_enemyContainer is null");
-        }
-
-        if(_powerUps == null)
-        {
-            Debug.LogError("_powerUps is null");
-        }
     }
 
-    
-    void Update()
-    {
-
-    }
 
     IEnumerator SpawnEnemies()
     {
+        yield return new WaitForSeconds(3f);
         while (_onPlayerDeath == false)
         {
             Vector3 spawnPos = new Vector3(Random.Range(-9.4f, 9.4f), 8, 0);
@@ -56,6 +42,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUps()
     {
+        yield return new WaitForSeconds(3f);
         while (_onPlayerDeath == false)
         {
             WaitForSeconds randomSpawnTime = new WaitForSeconds(Random.Range(3, 8));
