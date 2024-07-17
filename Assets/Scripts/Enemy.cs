@@ -12,8 +12,18 @@ public class Enemy : MonoBehaviour
 
     Player _player;
 
+    Laser _laser;
+
+    [SerializeField] GameObject _laserPrefab;
+
     [SerializeField] AudioClip _explosionClip;
     AudioSource _audioSource;
+
+    float _fireRate = 3f;
+
+    float _canFire = -1f;
+
+
 
    
     
@@ -36,14 +46,28 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("audio source is null");
         }
+
+        _laser = GameObject.Find("Laser").GetComponent<Laser>();
+
+        if(_laser == null)
+        {
+            Debug.LogError("laser is null");
+        }
     }
 
     
     void Update()
     {
+        CalculateMovement();
+        FireLaser();
+    }
+
+
+    void CalculateMovement()
+    {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if(transform.position.y < -6)
+        if (transform.position.y < -6)
         {
             float _randomX = Random.Range(-9.4f, 9.4f);
 
@@ -81,5 +105,20 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject, 2.3f);
         }
 
+    }
+
+    void FireLaser()
+    {
+        if (Time.time > _canFire)
+        {
+            _fireRate = Random.Range(3f, 7f);
+            _canFire = Time.time + _fireRate;
+            GameObject enemyLasers = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+            Laser[] lasers = enemyLasers.GetComponentsInChildren<Laser>();
+            for(int i = 0; i < lasers.Length; i++)
+            {
+                lasers[i].AssignEnemyLaser();
+            }
+        }
     }
 }
