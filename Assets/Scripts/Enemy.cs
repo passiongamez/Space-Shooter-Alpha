@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
 
     Player _player;
 
+    [SerializeField] AudioClip _explosionClip;
+    AudioSource _audioSource;
+
    
     
     void Start()
@@ -26,6 +29,13 @@ public class Enemy : MonoBehaviour
         _enemyAnim = GetComponent<Animator>();
        
         _enemyCollider = GetComponent<Collider2D>();
+
+        _audioSource = GetComponent<AudioSource>();
+
+        if(_audioSource == null)
+        {
+            Debug.LogError("audio source is null");
+        }
     }
 
     
@@ -52,6 +62,7 @@ public class Enemy : MonoBehaviour
                 player.Damage();
             }
             _enemyAnim.SetTrigger("OnEnemyDeath");
+            _audioSource.PlayOneShot(_explosionClip);
             _speed = 0;
             _enemyCollider.enabled = false;
             Destroy(gameObject, 2.3f);
@@ -64,6 +75,7 @@ public class Enemy : MonoBehaviour
                 _player.AddScore(10);
             }
             _enemyAnim.SetTrigger("OnEnemyDeath");
+            _audioSource.PlayOneShot(_explosionClip);
             _speed = 0;
             _enemyCollider.enabled = false;
             Destroy(gameObject, 2.3f);

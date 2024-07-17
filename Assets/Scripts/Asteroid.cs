@@ -6,9 +6,9 @@ public class Asteroid : MonoBehaviour
 {
     [SerializeField] float _speed = 20f;
 
-    [SerializeField] GameObject _explosionEffect;
-
     Collider2D _collider2D;
+
+    [SerializeField] GameObject _explosionEffect;
 
     SpawnManager _spawnManager;
 
@@ -39,7 +39,7 @@ public class Asteroid : MonoBehaviour
             _collider2D.enabled = false;
             Destroy(other.gameObject);
             _spawnManager.StartSpawning();
-            Destroy(gameObject);
+            Destroy(gameObject, .7f);
         }
     }
 

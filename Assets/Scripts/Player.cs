@@ -15,6 +15,10 @@ public class Player : MonoBehaviour
 
     [SerializeField] int _lives = 3;
     int _score;
+
+    [SerializeField] AudioClip _explosionClip;
+    [SerializeField] AudioClip _laserClip;
+    AudioSource _audioSource;
    
 
     [SerializeField] GameObject _laserPrefab;
@@ -51,6 +55,13 @@ public class Player : MonoBehaviour
         }
 
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
+        _audioSource = GetComponent<AudioSource>();
+
+        if(_audioSource == null)
+        {
+            Debug.LogError("Audio Source is null");
+        }
     }
 
 
@@ -92,10 +103,12 @@ public class Player : MonoBehaviour
         if(_isTripeShotActive == false)
         {
             Instantiate(_laserPrefab, transform.position + _offset, Quaternion.identity);
+            _audioSource.PlayOneShot(_laserClip);
         }
         else if(_isTripeShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            _audioSource.PlayOneShot(_laserClip);
         }
 
     }
@@ -129,9 +142,10 @@ public class Player : MonoBehaviour
 
         if (_lives < 1)
         {
+            _audioSource.PlayOneShot(_explosionClip);
             _gameManager.GameOver();
             _spawnManager.OnPlayerDeath();
-            Destroy(gameObject);
+            Destroy(gameObject, .7f);
         }
     }
 
