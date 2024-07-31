@@ -204,21 +204,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _fireRate: 0.2
+  _shieldHP: 0
   _lives: 3
+  _currentHP: 0
+  _currentAmmoCount: 0
+  _theBoomAmmoCount: 0
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _laserClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
-  _powerUpClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   _laserPrefab: {fileID: 5195013914488810736, guid: 2b2ba3332c6988c4e8fb95f69b818ec3,
     type: 3}
   _tripleShotPrefab: {fileID: 4137920943685829143, guid: 1e589e9ddc6f5414882c9a921111f3c5,
     type: 3}
+  _theBoom: {fileID: 5440573378998476781, guid: 52c8f7ced660203498ed20406d6a9189,
+    type: 3}
   _shield: {fileID: 4792800349396663721}
-  _damageEffect:
-  - {fileID: 2833982430641828630}
-  - {fileID: 4921141551690705946}
+  _visualDamage: []
   _isTripeShotActive: 0
   _isSpeedBoosted: 0
   _isShieldActive: 0
+  _theBoomActive: 0
 --- !u!61 &7226392611200372101
 BoxCollider2D:
   m_ObjectHideFlags: 0

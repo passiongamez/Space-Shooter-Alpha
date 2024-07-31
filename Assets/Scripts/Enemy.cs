@@ -12,8 +12,6 @@ public class Enemy : MonoBehaviour
 
     Player _player;
 
-    Laser _laser;
-
     [SerializeField] GameObject _laserPrefab;
 
     [SerializeField] AudioClip _explosionClip;
@@ -22,6 +20,8 @@ public class Enemy : MonoBehaviour
     float _fireRate = 3f;
 
     float _canFire = -1f;
+
+    bool _fireOn = true;
 
 
 
@@ -45,13 +45,6 @@ public class Enemy : MonoBehaviour
         if(_audioSource == null)
         {
             Debug.LogError("audio source is null");
-        }
-
-        _laser = GameObject.Find("Laser").GetComponent<Laser>();
-
-        if(_laser == null)
-        {
-            Debug.LogError("laser is null");
         }
     }
 
@@ -77,39 +70,55 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player")
+        switch (other.tag)
         {
-            Player player = other.GetComponent<Player>();
-
-            if(player != null)
-            {
-                player.Damage();
-            }
-            _enemyAnim.SetTrigger("OnEnemyDeath");
-            _audioSource.PlayOneShot(_explosionClip);
-            _speed = 0;
-            _enemyCollider.enabled = false;
-            Destroy(gameObject, 2.3f);
+            case "Player": 
+                Player player = other.GetComponent<Player>();
+                if (player != null)
+                {
+                    player.Damage();
+                }
+                _enemyAnim.SetTrigger("OnEnemyDeath");
+                _audioSource.PlayOneShot(_explosionClip);
+                _speed = 0;
+                _enemyCollider.enabled = false;
+                _fireOn = false;
+                Destroy(gameObject, 2.3f);
+                break;
+            case "Laser":
+                Destroy(other.gameObject);
+                if (_player != null)
+                {
+                    _player.AddScore(10);
+                }
+                _enemyAnim.SetTrigger("OnEnemyDeath");
+                _audioSource.PlayOneShot(_explosionClip);
+                _speed = 0;
+                _enemyCollider.enabled = false;
+                _fireOn = false;
+                Destroy(gameObject, 2.3f);
+                break;
+            case "Enemy Lasers":
+                return;
+            case "The Boom":
+                Destroy(other.gameObject);
+                if (_player != null)
+                {
+                    _player.AddScore(10);
+                }
+                _enemyAnim.SetTrigger("OnEnemyDeath");
+                _audioSource.PlayOneShot(_explosionClip);
+                _speed = 0;
+                _enemyCollider.enabled = false;
+                _fireOn = false;
+                Destroy(gameObject, 2.3f);
+                break;
         }
-        else if(other.tag == "Laser")
-        {
-            Destroy(other.gameObject);
-            if(_player != null)
-            {
-                _player.AddScore(10);
-            }
-            _enemyAnim.SetTrigger("OnEnemyDeath");
-            _audioSource.PlayOneShot(_explosionClip);
-            _speed = 0;
-            _enemyCollider.enabled = false;
-            Destroy(gameObject, 2.3f);
-        }
-
     }
 
     void FireLaser()
     {
-        if (Time.time > _canFire)
+        if (Time.time > _canFire && _fireOn == true)
         {
             _fireRate = Random.Range(3f, 7f);
             _canFire = Time.time + _fireRate;

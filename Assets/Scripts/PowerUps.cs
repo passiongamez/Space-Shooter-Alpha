@@ -50,12 +50,21 @@ public class PowerUps : MonoBehaviour
                     case 2:
                         _player.ActivateShield();
                         break;
+                    case 3:
+                        _player.AmmoRefill();
+                        break;
+                    case 4:
+                        _player.IncreaseHealth();
+                        break;
+                    case 5:
+                        _player.SecondaryPowerUp();
+                        break;
                     default:
                         Debug.Log("No powerup collected");
                         break;
                 }
             }
-            AudioSource.PlayClipAtPoint(_powerUpClip, transform.position);
+            AudioSource.PlayClipAtPoint(_powerUpClip, transform.position, 1f);
             Destroy(gameObject);
         } 
     }

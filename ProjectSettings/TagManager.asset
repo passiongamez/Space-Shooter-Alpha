@@ -10,6 +10,7 @@ TagManager:
   - SpeedPowerup
   - ShieldPowerup
   - EnemyLaser
+  - The Boom
   layers:
   - Default
   - TransparentFX

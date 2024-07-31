@@ -10,8 +10,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text _scoreText;
     [SerializeField] Text _gameOver;
     [SerializeField] Text _restartText;
+    [SerializeField] Text _ammoCountText;
+    [SerializeField] Text _boomAmmoText;
 
     [SerializeField] Image _livesIMG;
+    [SerializeField] Image _boomAmmo;
 
     [SerializeField] Sprite[] _livesDisplay;
 
@@ -38,6 +41,10 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("Score text is null");
         }
+
+        _boomAmmoText.text = "";
+
+        _ammoCountText.text = "x15";
     }
 
     // Update is called once per frame
@@ -75,6 +82,22 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             _gameOver.enabled = false;
             yield return new WaitForSeconds(.5f);
+        }
+    }
+
+    public void UpdateAmmoCount(int ammoCount)
+    {
+        _ammoCountText.text = "x" + ammoCount;
+    }
+
+    public void BoomAmmoUpdate(int ammoCount)
+    {
+        _boomAmmo.gameObject.SetActive(true);
+        _boomAmmoText.text = "x" + ammoCount;
+        if(ammoCount == 0)
+        {
+            _boomAmmo.gameObject.SetActive(false);
+            _boomAmmoText.text = "";
         }
     }
 }

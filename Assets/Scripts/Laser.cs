@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class Laser : MonoBehaviour
 {
@@ -51,7 +52,6 @@ public class Laser : MonoBehaviour
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
         if(transform.position.y < -10)
         {
-            Destroy(transform.parent.gameObject);
             Destroy(gameObject);
         }      
     }
@@ -66,8 +66,7 @@ public class Laser : MonoBehaviour
         if(_isEnemyLaser == true && other.tag == "Player")
         {
             _player.Damage();
-            Destroy(transform.parent.gameObject);
             Destroy(gameObject);
-        }      
+        }   
     }
 }
