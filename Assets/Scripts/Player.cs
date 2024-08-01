@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     SpawnManager _spawnManager;
     UIManager _uiManager;
     GameManager _gameManager;
+    MainCamera _mainCamera;
 
     SpriteRenderer _shieldColor;
 
@@ -84,6 +85,14 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("color is null");
         }
+
+        _mainCamera = GameObject.Find("Main Camera").GetComponent<MainCamera>();
+
+        if(_mainCamera == null)
+        {
+            Debug.LogError("Main camera is null");
+        }
+
 
         _currentFuel = _maxFuel;
         _currentAmmoCount = _startingAmmo;
@@ -239,6 +248,7 @@ public class Player : MonoBehaviour
         else
         {
             _currentHP--;
+            _mainCamera.CameraShake();
             _uiManager.UpdateLives(_currentHP);
             if (_currentHP == 2)
             {
