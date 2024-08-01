@@ -12,9 +12,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text _restartText;
     [SerializeField] Text _ammoCountText;
     [SerializeField] Text _boomAmmoText;
+    [SerializeField] Text _fuelText;
 
     [SerializeField] Image _livesIMG;
     [SerializeField] Image _boomAmmo;
+    [SerializeField] Image _fuel;
 
     [SerializeField] Sprite[] _livesDisplay;
 
@@ -45,6 +47,7 @@ public class UIManager : MonoBehaviour
         _boomAmmoText.text = "";
 
         _ammoCountText.text = "x15";
+
     }
 
     // Update is called once per frame
@@ -99,5 +102,10 @@ public class UIManager : MonoBehaviour
             _boomAmmo.gameObject.SetActive(false);
             _boomAmmoText.text = "";
         }
+    }
+
+    public void FuelUpdate(float fuel)
+    {
+        _fuelText.text = ":" + fuel.ToString();
     }
 }

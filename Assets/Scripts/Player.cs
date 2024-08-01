@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
     [SerializeField] float _fireRate = 0.2f;
     float _canFire = -1f;
 
+    [SerializeField] float _maxFuel = 100;
+    [SerializeField] float _currentFuel;
+
     [SerializeField] int _shieldHP;
     [SerializeField] int _lives = 3;
     [SerializeField] int _currentHP;
@@ -22,8 +25,6 @@ public class Player : MonoBehaviour
     int _startingAmmo = 15;
     [SerializeField] int _currentAmmoCount;
     [SerializeField] int _theBoomAmmoCount;
-    [SerializeField] int _maxFuel = 100;
-    [SerializeField] int _currentFuel;
 
     [SerializeField] AudioClip _explosionClip;
     [SerializeField] AudioClip _laserClip;
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour
     [SerializeField] bool _isSpeedBoosted = false;
     [SerializeField] bool _isShieldActive = false;
     [SerializeField] bool _theBoomActive = false;
+    [SerializeField] bool _isThrusterActive = false;
 
     WaitForSeconds _powerUpCoolDownTimer = new WaitForSeconds(5f);
 
@@ -116,21 +118,47 @@ public class Player : MonoBehaviour
         float boostSpeed = (_speed + _sprintSpeed) * _speedBoostMultiplier;
 
 
-
-
-        if (Input.GetKey(KeyCode.LeftShift) && _isSpeedBoosted == false)
+        if(Input.GetKeyDown(KeyCode.LeftShift) && _currentFuel > 0)
         {
-            transform.Translate(direction * sprintSpeed * Time.deltaTime);
-            _currentFuel-= 10 * (int)Time.deltaTime;
+            _isThrusterActive = true;
         }
-        else if (_isSpeedBoosted == true)
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _isThrusterActive = false;
+        }
+
+
+        if (_isSpeedBoosted == true)
         {
             transform.Translate(direction * boostSpeed * Time.deltaTime);
         }
-        else if (_isSpeedBoosted == false && !Input.GetKey(KeyCode.LeftShift))
+        else if (_isThrusterActive == true)
+        {
+            transform.Translate(direction * sprintSpeed * Time.deltaTime);
+            _currentFuel -= Time.deltaTime * 20f;
+        }
+        else
         {
             transform.Translate(direction * currentSpeed * Time.deltaTime);
         }
+
+        if (_isThrusterActive == false && _currentFuel < _maxFuel)
+        {
+            Refuel();
+        }
+
+
+        if (_currentFuel < 0)
+        {
+            _isThrusterActive = false;
+            _currentFuel = 0;
+        }
+        if (_currentFuel > _maxFuel)
+        {
+            _currentFuel = _maxFuel;
+        }
+
+        _uiManager.FuelUpdate(Mathf.RoundToInt(_currentFuel));
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
@@ -142,6 +170,11 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(_xBound, transform.position.y, 0);
         }
+    }
+
+    void Refuel()
+    {
+      _currentFuel += Time.deltaTime * 40f;
     }
 
     void FireLaser()
@@ -306,18 +339,8 @@ public class Player : MonoBehaviour
         _theBoomAmmoCount = 3;
         _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
     }
-
-
-    //IEnumerator ThrusterUse()
-    //{
-
-    //}
 }
 
 
 
 
-/*while you are using the thrusters the thrusters will be counting down from 100 and when they reach 0 you will not 
- * be able to use the thrusters until they reach 100 again. but if you use it and it doesnt reach 0 then you will be able 
- * to use it again. when it reaches 0 it will be overloaded which is why you cant use it until its at 100 again. the ui
- * will show the thruster percentage only while its being used and its charging but may just be on the whole time*/
