@@ -59,6 +59,9 @@ public class PowerUps : MonoBehaviour
                     case 5:
                         _player.SecondaryPowerUp();
                         break;
+                    case 6:
+                        _player.Depower();
+                        break;
                     default:
                         Debug.Log("No powerup collected");
                         break;

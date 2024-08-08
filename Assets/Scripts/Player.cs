@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.UIElements.Experimental;
 
 public class Player : MonoBehaviour
 {
@@ -52,6 +53,16 @@ public class Player : MonoBehaviour
     MainCamera _mainCamera;
 
     SpriteRenderer _shieldColor;
+
+
+    public enum PowerUps
+    {
+        Speed,
+        TripleShot,
+        TheBoom,
+        Shield,
+        Ammo
+    }
 
 
 
@@ -188,19 +199,26 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        _canFire = Time.time + _fireRate;
-
         if (_isTripeShotActive == false && _currentAmmoCount >= 1)
         {
+            _canFire = Time.time + _fireRate;
             Instantiate(_laserPrefab, transform.position + _offset, Quaternion.identity);
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount--;
         }
-        else if (_isTripeShotActive == true && _currentAmmoCount >= 3)
+        if (_isTripeShotActive == true && _currentAmmoCount >= 3)
         {
+            _canFire = Time.time + _fireRate;
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount -= 3;
+        }
+        else if(_isTripeShotActive == true && _currentAmmoCount < 3 && _currentAmmoCount > 0)
+        {
+            _canFire = Time.time + _fireRate;
+            Instantiate(_laserPrefab, transform.position + _offset, Quaternion.identity);
+            _audioSource.PlayOneShot(_laserClip);
+            _currentAmmoCount--;
         }
         _uiManager.UpdateAmmoCount(_currentAmmoCount);
     }
@@ -348,6 +366,42 @@ public class Player : MonoBehaviour
         _theBoomActive = true;
         _theBoomAmmoCount = 3;
         _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
+    }
+
+
+    public void Depower()
+    {
+        PowerUps values = (PowerUps)Random.Range(0, 5);
+        switch (values)
+        {
+            case PowerUps.Speed:
+                _isSpeedBoosted = false;
+                Debug.Log(values);
+                break;
+            case PowerUps.TripleShot:
+                _isTripeShotActive = false;
+                Debug.Log(values);
+                break;
+            case PowerUps.TheBoom:
+                _theBoomActive = false;
+                _theBoomAmmoCount = 0;
+                _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
+                Debug.Log(values);
+                break;
+            case PowerUps.Shield:
+                _isShieldActive = false;
+                _shield.SetActive(false);
+                Debug.Log(values);
+                break;
+            case PowerUps.Ammo:
+                _currentAmmoCount -= 5;
+                _uiManager.UpdateAmmoCount(_currentAmmoCount);
+                Debug.Log(values);
+                break;
+            default:
+                Debug.Log("default selected");
+                return;
+        }
     }
 }
 

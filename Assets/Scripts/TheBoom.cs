@@ -60,7 +60,6 @@ public class TheBoom : MonoBehaviour
 
             _spriteShapeRenderer.enabled = false;
             Destroy(other.gameObject);
-            Destroy(gameObject, 3f);
         }
     }
 
@@ -71,5 +70,6 @@ public class TheBoom : MonoBehaviour
         _audioSource.PlayOneShot(_boomExplosion);
         _speed = 0;
         _collider.enabled = true;
+        Destroy(gameObject, 1f);
     }
 }

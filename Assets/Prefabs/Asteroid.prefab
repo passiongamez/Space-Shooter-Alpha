@@ -134,9 +134,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff78c116530d6b743a3943ee9d2b7000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 20
-  _explosionEffect: {fileID: 0}
-  _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
+  _speed: 5
+  _explosionEffect: {fileID: 4473994927606558927, guid: 04adde5819bd2744fb589e04476e3db5,
+    type: 3}
 --- !u!82 &946877616038846407
 AudioSource:
   m_ObjectHideFlags: 0
@@ -148,7 +148,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
