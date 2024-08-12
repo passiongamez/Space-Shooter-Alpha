@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     float _speedBoostMultiplier = 1.5f;
     float _sprintSpeed = 3f;
 
-    private float _xBound = 11.3f;
+    private float _xBound = 13.75f;
     private Vector3 _offset = new Vector3(0, 1f, 0);
 
     [SerializeField] float _fireRate = 0.2f;
@@ -108,6 +108,7 @@ public class Player : MonoBehaviour
         _currentFuel = _maxFuel;
         _currentAmmoCount = _startingAmmo;
         _currentHP = _lives;
+        transform.position = new Vector3(0,0,0);
     }
 
 
@@ -180,7 +181,7 @@ public class Player : MonoBehaviour
 
         _uiManager.FuelUpdate(Mathf.RoundToInt(_currentFuel));
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 1), 0);
 
         if (transform.position.x >= _xBound)
         {
@@ -220,6 +221,11 @@ public class Player : MonoBehaviour
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount--;
         }
+
+        if (_currentAmmoCount == 0)
+        {
+            _spawnManager.AmmoSpawn();
+        }
         _uiManager.UpdateAmmoCount(_currentAmmoCount);
     }
 
@@ -240,11 +246,11 @@ public class Player : MonoBehaviour
         _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
     }
 
-    public void Damage()
+    public void Damage(int damage)
     {
         if (_isShieldActive == true)
         {
-            _shieldHP--;
+            _shieldHP -= damage;
             if (_shieldHP == 3)
             {
                 return;
@@ -257,15 +263,16 @@ public class Player : MonoBehaviour
             {
                 _shieldColor.color = Color.red;
             }
-            else if (_shieldHP == 0)
+            else if (_shieldHP <= 0)
             {
+                _shieldHP = 0;
                 _isShieldActive = false;
                 _shield.SetActive(false);
             }
         }
         else
         {
-            _currentHP--;
+            _currentHP -= damage;
             _mainCamera.CameraShake();
             _uiManager.UpdateLives(_currentHP);
             if (_currentHP == 2)
@@ -281,15 +288,17 @@ public class Player : MonoBehaviour
             {
                 _visualDamage[0].SetActive(true);
             }
+            if (_currentHP <= 0)
+            {
+                _currentHP = 0;
+                AudioSource.PlayClipAtPoint(_explosionClip, transform.position, 1f);
+                _gameManager.GameOver();
+                _spawnManager.OnPlayerDeath();
+                Destroy(gameObject);
+            }
         }
 
-        if (_currentHP < 1)
-        {
-            AudioSource.PlayClipAtPoint(_explosionClip, transform.position, 1f);
-            _gameManager.GameOver();
-            _spawnManager.OnPlayerDeath();
-            Destroy(gameObject);
-        }
+
     }
 
     public void ActivateTripleShot()
@@ -394,7 +403,14 @@ public class Player : MonoBehaviour
                 Debug.Log(values);
                 break;
             case PowerUps.Ammo:
-                _currentAmmoCount -= 5;
+                if(_currentAmmoCount >= 6)
+                {
+                    _currentAmmoCount -= 5;
+                }
+                else
+                {
+                    _currentAmmoCount = 0;
+                }
                 _uiManager.UpdateAmmoCount(_currentAmmoCount);
                 Debug.Log(values);
                 break;

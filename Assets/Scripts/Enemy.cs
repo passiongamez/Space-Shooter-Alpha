@@ -113,23 +113,23 @@ public class Enemy : MonoBehaviour
 
 
 
-        if (transform.position.y < -6)
+        if (transform.position.y < -11)
         {
-            float _randomX = Random.Range(-9.4f, 9.4f);
+            float _randomX = Random.Range(-15f, 15f);
 
-            transform.position = new Vector3(_randomX, 8, 0);
+            transform.position = new Vector3(_randomX, 11, 0);
         }
-        if(transform.position.x > 12)
+        if(transform.position.x > 15.5f)
         {
-            float randomX = Random.Range(1, 5);
+            float randomY = Random.Range(1, 8);
 
-            transform.position = new Vector3(-12, randomX, 0);
+            transform.position = new Vector3(-15.5f, randomY, 0);
         }
-        if(transform.position.x < -12)
+        if(transform.position.x < -15.5f)
         {
-            float randomX = Random.Range(1, 5);
+            float randomY = Random.Range(1, 8);
 
-            transform.position = new Vector3(12, randomX, 0);
+            transform.position = new Vector3(15.5f, randomY, 0);
         }
     }
     void StraightDown()
@@ -193,10 +193,11 @@ public class Enemy : MonoBehaviour
                 Player player = other.GetComponent<Player>();
                 if (player != null)
                 {
-                    player.Damage();
+                    player.Damage(1);
                 }
                 _enemyAnim.SetTrigger("OnEnemyDeath");
                 _audioSource.PlayOneShot(_explosionClip);
+                _player.AddScore(10);
                 _speed = 0;
                 _enemyCollider.enabled = false;
                 _fireOn = false;
@@ -237,7 +238,7 @@ public class Enemy : MonoBehaviour
     {
         if (Time.time > _canFire && _fireOn == true)
         {
-            _fireRate = Random.Range(3f, 7f);
+            _fireRate = Random.Range(3f, 5f);
             _canFire = Time.time + _fireRate;
             GameObject enemyLasers = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
             Laser[] lasers = enemyLasers.GetComponentsInChildren<Laser>();

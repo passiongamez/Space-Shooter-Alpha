@@ -13,12 +13,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text _ammoCountText;
     [SerializeField] Text _boomAmmoText;
     [SerializeField] Text _fuelText;
+    [SerializeField] Text _waveText;
 
     [SerializeField] Image _livesIMG;
     [SerializeField] Image _boomAmmo;
     [SerializeField] Image _fuel;
 
     [SerializeField] Sprite[] _livesDisplay;
+
+    WaitForSeconds _waveTextLength = new WaitForSeconds(2f);
 
     // Start is called before the first frame update
     void Start()
@@ -107,5 +110,17 @@ public class UIManager : MonoBehaviour
     public void FuelUpdate(float fuel)
     {
         _fuelText.text = ":" + fuel.ToString();
+    }
+
+    public void UpdateWave(int waveNumber)
+    {
+        _waveText.text = "Wave " + waveNumber;
+        StartCoroutine(WaveTextOff());
+    }
+
+    IEnumerator WaveTextOff()
+    {
+        yield return _waveTextLength;
+        _waveText.text = "";
     }
 }
