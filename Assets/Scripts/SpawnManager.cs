@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] GameObject _enemyPrefab;
-    [SerializeField] GameObject _destroyerPrefab;
+    [SerializeField] GameObject[] _enemies;
 
     WaitForSeconds _waitTime = new WaitForSeconds(2f);
-    WaitForSeconds _rareSpawnTime = new WaitForSeconds(10f);
     WaitForSeconds _waveTime = new WaitForSeconds(3f);
     WaitForSeconds _destroyerWait = new WaitForSeconds(3);
 
@@ -20,10 +18,12 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] int _waves = 0;
     [SerializeField] int _enemiesToSpawn = 5;
     [SerializeField] int _enemiesSpawned;
-    [SerializeField] int _destroyersToSpawn;
     public int[] percent = { 21, 19, 15, 14, 12, 10, 9 };
-    [SerializeField] int total;
+    [SerializeField] int _totalOfPercent;
     [SerializeField] int _randomNumber;
+    public int[] enemyChance = { 50, 30, 20 };
+    [SerializeField] int _totalOfEnemyChance;
+    [SerializeField] int _randomNumber2;
 
 
     bool _onPlayerDeath = false;
@@ -44,7 +44,12 @@ public class SpawnManager : MonoBehaviour
         _destroyerWait = new WaitForSeconds(Random.Range(3, 7));
         foreach(int percent in percent)
         {
-            total += percent;
+            _totalOfPercent += percent;
+        }
+
+        foreach(int enemyChance in enemyChance)
+        {
+            _totalOfEnemyChance += enemyChance;
         }
     }
 
@@ -62,14 +67,14 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUps()
     {
-        yield return new WaitForSeconds(3f);
+        yield return _waitTime;
         while (_onPlayerDeath == false)
         {
             WaitForSeconds randomSpawnTime = new WaitForSeconds(Random.Range(3, 8));
             Vector3 spawnPos = new Vector3(Random.Range(-12f, 12f), 11, 0);
 
             yield return randomSpawnTime;
-            _randomNumber = Random.Range(0, total);
+            _randomNumber = Random.Range(0, _totalOfPercent);
 
             for(int i = 0; i < percent.Length; i++)
             {
@@ -102,52 +107,61 @@ public class SpawnManager : MonoBehaviour
         {
             yield return _waveTime;
             _waves++;
-            _destroyersToSpawn = Random.Range(1, 6);
-            _enemiesToSpawn = (_enemiesToSpawn + Random.Range(3, 6)) + _destroyersToSpawn;
+            _enemiesToSpawn = _enemiesToSpawn + Random.Range(3, 6);
             _enemiesSpawned = 0;
-            int destroyersSpawned = 0;
             _uiManager.UpdateWave(_waves);
             while (_enemiesSpawned < _enemiesToSpawn)
             {
-                if (_movesRight == true)
+                _randomNumber2 = Random.Range(0, _totalOfEnemyChance);
+                Debug.Log(_randomNumber2);
+                for(int i = 0; i < enemyChance.Length; i++)
                 {
-                    float xBounds = 15.5f;
-                    float yBounds = Random.Range(1, 8);
-                    Vector3 spawnPos = new Vector3(-xBounds, yBounds, 0);
-                    GameObject _newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
-                    _newEnemy.transform.parent = _enemyContainer.transform;
-                }
-                else if (_movesLeft == true)
-                {
-                    float xBounds = 15.5f;
-                    float yBounds = Random.Range(1, 8);
-                    Vector3 spawnPos = new Vector3(xBounds, yBounds, 0);
-                    GameObject _newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
-                    _newEnemy.transform.parent = _enemyContainer.transform;
-                }
-                else
-                {
-                    Vector3 spawnPos = new Vector3(Random.Range(-15f, 15f), 11, 0);
-                    GameObject _newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
-                    _newEnemy.transform.parent = _enemyContainer.transform;
+                    if (_randomNumber2 <= enemyChance[i])
+                    {
+                        if (_movesRight == true)
+                        {
+                            float xBounds = 15.5f;
+                            float yBounds = Random.Range(1, 8);
+                            Vector3 spawnPos = new Vector3(-xBounds, yBounds, 0);
+
+                            GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                            newEnemy.transform.parent = _enemyContainer.transform;
+                        }
+                        else if (_movesLeft == true)
+                        {
+                            float xBounds = 15.5f;
+                            float yBounds = Random.Range(1, 8);
+                            Vector3 spawnPos = new Vector3(xBounds, yBounds, 0);
+
+                            GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                            newEnemy.transform.parent = _enemyContainer.transform;
+                        }
+                        else if (i == 2)
+                        {
+                            float yBound = Random.Range(1, 7);
+                            Vector3 startPos1 = new Vector3(15f, yBound, 0);
+                            Vector3 startPos2 = new Vector3(-15f, yBound, 0);
+                            Vector3[] startPos = { startPos1, startPos2 };
+
+                            GameObject newEnemy = Instantiate(_enemies[i], startPos[Random.Range(0, 2)], Quaternion.identity);
+                            newEnemy.transform.parent = _enemyContainer.transform;
+                        }
+                        else
+                        {
+                            Vector3 spawnPos = new Vector3(Random.Range(-15f, 15f), 11, 0);
+                            GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                            newEnemy.transform.parent = _enemyContainer.transform;
+
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        _randomNumber2 -= enemyChance[i];
+                    }
                 }
                 _enemiesSpawned++;
                 yield return _waitTime;
-
-                while (destroyersSpawned < _destroyersToSpawn)
-                {
-                    float yBound = Random.Range(1, 7);
-                    Vector3 startPos1 = new Vector3(15f, yBound, 0);
-                    Vector3 startPos2 = new Vector3(-15f, yBound, 0);
-                    Vector3[] startPos = { startPos1, startPos2 };
-
-                    GameObject destroyer = Instantiate(_destroyerPrefab, startPos[Random.Range(0, 2)], Quaternion.identity);
-                    destroyer.transform.parent = _enemyContainer.transform;
-
-                    destroyersSpawned++;
-                    _enemiesSpawned++;
-                    yield return _destroyerWait;
-                }
             }
             while (_enemyContainer.transform.childCount > 0)
             {
@@ -172,7 +186,6 @@ public class SpawnManager : MonoBehaviour
         }
     }
 }
-
 
 
 

@@ -27,6 +27,9 @@ public class Enemy : MonoBehaviour
     float _time;
 
     bool _fireOn = true;
+    [SerializeField] bool _hasShield;
+
+    [SerializeField] GameObject _shield;
 
     EnemyMovement values;
 
@@ -74,7 +77,8 @@ public class Enemy : MonoBehaviour
         }
 
        values = (EnemyMovement)Random.Range(0, 5);
-        Debug.Log(values.ToString());
+
+        
     }
 
 
@@ -195,13 +199,21 @@ public class Enemy : MonoBehaviour
                 {
                     player.Damage(1);
                 }
-                _enemyAnim.SetTrigger("OnEnemyDeath");
-                _audioSource.PlayOneShot(_explosionClip);
-                _player.AddScore(10);
-                _speed = 0;
-                _enemyCollider.enabled = false;
-                _fireOn = false;
-                Destroy(gameObject, 2.3f);
+                if(_hasShield == true)
+                {
+                    _shield.SetActive(false);
+                    _hasShield = false;
+                }
+                else
+                {
+                    _enemyAnim.SetTrigger("OnEnemyDeath");
+                    _audioSource.PlayOneShot(_explosionClip);
+                    _player.AddScore(10);
+                    _speed = 0;
+                    _enemyCollider.enabled = false;
+                    _fireOn = false;
+                    Destroy(gameObject, 2.3f);
+                }
                 break;
             case "Laser":
                 Destroy(other.gameObject);
@@ -209,12 +221,20 @@ public class Enemy : MonoBehaviour
                 {
                     _player.AddScore(10);
                 }
-                _enemyAnim.SetTrigger("OnEnemyDeath");
-                _audioSource.PlayOneShot(_explosionClip);
-                _speed = 0;
-                _enemyCollider.enabled = false;
-                _fireOn = false;
-                Destroy(gameObject, 2.3f);
+                if (_hasShield == true)
+                {
+                    _shield.SetActive(false);
+                    _hasShield = false;
+                }
+                else
+                {
+                    _enemyAnim.SetTrigger("OnEnemyDeath");
+                    _audioSource.PlayOneShot(_explosionClip);
+                    _speed = 0;
+                    _enemyCollider.enabled = false;
+                    _fireOn = false;
+                    Destroy(gameObject, 2.3f);
+                }
                 break;
             case "Enemy Lasers":
                 return;
@@ -224,6 +244,8 @@ public class Enemy : MonoBehaviour
                 {
                     _player.AddScore(10);
                 }
+                _shield.SetActive(false);
+                _hasShield = false;
                 _enemyAnim.SetTrigger("OnEnemyDeath");
                 _audioSource.PlayOneShot(_explosionClip);
                 _speed = 0;
