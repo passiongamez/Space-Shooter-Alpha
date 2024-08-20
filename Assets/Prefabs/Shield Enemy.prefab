@@ -150,6 +150,7 @@ MonoBehaviour:
   _circleEndTime: 0
   _laserPrefab: {fileID: 8089715829028103509, guid: c293746c4847982488ba7fe3253eb182,
     type: 3}
+  _player: {fileID: 1210171414015521748, guid: e772b9fabd083e74fb0f1b5198af4cf8, type: 3}
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _hasShield: 1
   _shield: {fileID: 5558699598276366393}

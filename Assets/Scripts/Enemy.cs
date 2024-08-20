@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Enemy : MonoBehaviour
     Player _player;
 
     [SerializeField] GameObject _laserPrefab;
+    GameObject _target;
 
     [SerializeField] AudioClip _explosionClip;
     AudioSource _audioSource;
@@ -76,6 +78,13 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Spawn Manager is null");
         }
 
+        _target = GameObject.Find("Player");
+
+        if (_target == null)
+        {
+            Debug.LogError("Target is null");
+        }
+
        values = (EnemyMovement)Random.Range(0, 5);
 
         
@@ -91,30 +100,40 @@ public class Enemy : MonoBehaviour
 
     void CalculateMovement()
     {
-        switch (values)
-        {
-            case EnemyMovement.StraightDown:
-                StraightDown();
-                break;
-            case EnemyMovement.MoveLeft:
-                MoveLeft();
-                break;
-            case EnemyMovement.MoveRight:
-                MoveRight();
-                break;
-            /*case EnemyMovement.ZigZag:
-                ZigZag();
-                break;*/
-            case EnemyMovement.DiagonalLeft:
-                DiagonalLeft();
-                break;
-            case EnemyMovement.DiagonalRight:
-                DiagonalRight();
-                break;
-            default:
-                break;
-        }
+        Vector3 position = transform.position;
+        Vector3 targetPos = _target.transform.position;
 
+
+        if (Vector3.Distance(position, targetPos) <= 5)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _speed * Time.deltaTime);
+        }
+        else
+        {
+            switch (values)
+            {
+                case EnemyMovement.StraightDown:
+                    StraightDown();
+                    break;
+                case EnemyMovement.MoveLeft:
+                    MoveLeft();
+                    break;
+                case EnemyMovement.MoveRight:
+                    MoveRight();
+                    break;
+                /*case EnemyMovement.ZigZag:
+                    ZigZag();
+                    break;*/
+                case EnemyMovement.DiagonalLeft:
+                    DiagonalLeft();
+                    break;
+                case EnemyMovement.DiagonalRight:
+                    DiagonalRight();
+                    break;
+                default:
+                    break;
+            }
+        }
 
 
         if (transform.position.y < -11)
@@ -217,7 +236,7 @@ public class Enemy : MonoBehaviour
                 break;
             case "Laser":
                 Destroy(other.gameObject);
-                if (_player != null)
+                if (_target != null)
                 {
                     _player.AddScore(10);
                 }
@@ -240,7 +259,7 @@ public class Enemy : MonoBehaviour
                 return;
             case "The Boom":
                 Destroy(other.gameObject);
-                if (_player != null)
+                if (_target != null)
                 {
                     _player.AddScore(10);
                 }
@@ -256,17 +275,45 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void FireLaser()
+    void BackFire()
     {
         if (Time.time > _canFire && _fireOn == true)
         {
             _fireRate = Random.Range(3f, 5f);
             _canFire = Time.time + _fireRate;
-            GameObject enemyLasers = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+            GameObject enemyLasers = Instantiate(_laserPrefab, transform.position + new Vector3(0, 3, 0), Quaternion.identity);
             Laser[] lasers = enemyLasers.GetComponentsInChildren<Laser>();
-            for(int i = 0; i < lasers.Length; i++)
+            for (int i = 0; i < lasers.Length; i++)
             {
                 lasers[i].AssignEnemyLaser();
+                lasers[i].BackFiring();
+            }
+        }
+    }
+
+    void FireLaser()
+    {
+        float yPos = transform.position.y;
+        float yTarget = _target.transform.position.y;
+
+
+        if(yPos < yTarget)
+        {
+            BackFire();
+            Debug.Log("backfire");
+        }
+        else if(yPos >= yTarget)
+        {
+            if (Time.time > _canFire && _fireOn == true)
+            {
+                _fireRate = Random.Range(3f, 5f);
+                _canFire = Time.time + _fireRate;
+                GameObject enemyLasers = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+                Laser[] lasers = enemyLasers.GetComponentsInChildren<Laser>();
+                for (int i = 0; i < lasers.Length; i++)
+                {
+                    lasers[i].AssignEnemyLaser();
+                }
             }
         }
     }
