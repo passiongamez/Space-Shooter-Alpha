@@ -291,6 +291,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void DestroyPowerUp()
+    {
+        GameObject enemyLasers = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+        Laser[] lasers = enemyLasers.GetComponentsInChildren<Laser>();
+        for (int i = 0; i < lasers.Length; i++)
+        {
+            lasers[i].AssignEnemyLaser();
+        }
+    }
+
     void FireLaser()
     {
         float yPos = transform.position.y;

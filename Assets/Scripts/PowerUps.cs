@@ -35,7 +35,7 @@ public class PowerUps : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-       if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             if (_player != null)
             {
@@ -69,6 +69,6 @@ public class PowerUps : MonoBehaviour
             }
             AudioSource.PlayClipAtPoint(_powerUpClip, transform.position, 1f);
             Destroy(gameObject);
-        } 
+        }
     }
 }
