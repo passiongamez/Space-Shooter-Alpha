@@ -1919,8 +1919,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1210171414015521749, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+        type: 3}
+      propertyPath: _gravitationalBelt
+      value: 
+      objectReference: {fileID: 1210171414006104871}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e772b9fabd083e74fb0f1b5198af4cf8, type: 3}
+--- !u!1 &1210171414006104871 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5720558816877489436, guid: e772b9fabd083e74fb0f1b5198af4cf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1210171414006104870}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3123439852656661494
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject _shield;
     [SerializeField]
     GameObject[] _visualDamage;
+    [SerializeField] GameObject _gravitationalBelt;
 
     [SerializeField] bool _isTripeShotActive = false;
     [SerializeField] bool _isSpeedBoosted = false;
@@ -51,6 +52,7 @@ public class Player : MonoBehaviour
     UIManager _uiManager;
     GameManager _gameManager;
     MainCamera _mainCamera;
+    PowerUps _powerups;
 
     SpriteRenderer _shieldColor;
 

@@ -9,6 +9,7 @@ public class PowerUps : MonoBehaviour
     [SerializeField] int _powerUpID;
 
     Player _player;
+    GravitationalBelt _gravitationalBelt;
 
     [SerializeField] AudioClip _powerUpClip;
 
@@ -16,6 +17,16 @@ public class PowerUps : MonoBehaviour
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
+        if (_player == null)
+        {
+            Debug.LogError("Player is null");
+        }
+
+        _gravitationalBelt = GameObject.Find("Player").GetComponentInChildren<GravitationalBelt>();
+        if (_gravitationalBelt == null)
+        {
+            Debug.LogError("Gravitational belt is null");
+        }
     }
 
     // Update is called once per frame
@@ -70,5 +81,14 @@ public class PowerUps : MonoBehaviour
             AudioSource.PlayClipAtPoint(_powerUpClip, transform.position, 1f);
             Destroy(gameObject);
         }
+    }
+
+    public void ActivateGravityForce()
+    {
+        GameObject player = GameObject.Find("Player");
+        Vector3 playerPos = player.transform.position;
+        Vector3 currentPos = transform.position;
+
+        Vector3.MoveTowards(currentPos, playerPos, (_speed + 3) * Time.deltaTime);
     }
 }
