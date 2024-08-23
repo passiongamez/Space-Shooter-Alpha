@@ -387,22 +387,18 @@ public class Player : MonoBehaviour
         {
             case PowerUps.Speed:
                 _isSpeedBoosted = false;
-                Debug.Log(values);
                 break;
             case PowerUps.TripleShot:
                 _isTripeShotActive = false;
-                Debug.Log(values);
                 break;
             case PowerUps.TheBoom:
                 _theBoomActive = false;
                 _theBoomAmmoCount = 0;
                 _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
-                Debug.Log(values);
                 break;
             case PowerUps.Shield:
                 _isShieldActive = false;
                 _shield.SetActive(false);
-                Debug.Log(values);
                 break;
             case PowerUps.Ammo:
                 if(_currentAmmoCount >= 6)
@@ -417,7 +413,6 @@ public class Player : MonoBehaviour
                 Debug.Log(values);
                 break;
             default:
-                Debug.Log("default selected");
                 return;
         }
     }

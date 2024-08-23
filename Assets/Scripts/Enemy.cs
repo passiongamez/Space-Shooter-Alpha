@@ -207,6 +207,18 @@ public class Enemy : MonoBehaviour
         transform.Translate(new Vector3(.8f, -.8f, 0) * _speed * Time.deltaTime);
     }
 
+    public void DodgeLeft()
+    {
+        transform.Translate(Vector3.left * (_speed * 10) * Time.deltaTime);
+        Debug.Log("added force left");
+    }
+
+    public void DodgeRight()
+    {
+        transform.Translate(Vector3.right * (_speed * 10) * Time.deltaTime);
+        Debug.Log("added force right");
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -310,7 +322,6 @@ public class Enemy : MonoBehaviour
         if(yPos < yTarget)
         {
             BackFire();
-            Debug.Log("backfire");
         }
         else if(yPos >= yTarget)
         {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Radar : MonoBehaviour
@@ -18,11 +19,12 @@ public class Radar : MonoBehaviour
         }
     }
 
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "PowerUp")
         {
             _enemy.DestroyPowerUp();
-        }
+        }     
     }
 }

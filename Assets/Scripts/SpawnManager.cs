@@ -16,7 +16,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] GameObject[] _powerUps;
 
     [SerializeField] int _waves = 0;
-    [SerializeField] int _enemiesToSpawn = 5;
+    [SerializeField] int _enemiesToSpawn = 1;
     [SerializeField] int _enemiesSpawned;
     public int[] percent = { 21, 19, 15, 14, 12, 10, 9 };
     [SerializeField] int _totalOfPercent;
@@ -107,13 +107,12 @@ public class SpawnManager : MonoBehaviour
         {
             yield return _waveTime;
             _waves++;
-            _enemiesToSpawn = _enemiesToSpawn + Random.Range(3, 6);
+            _enemiesToSpawn = _enemiesToSpawn + Random.Range(2, 3);
             _enemiesSpawned = 0;
             _uiManager.UpdateWave(_waves);
             while (_enemiesSpawned < _enemiesToSpawn)
             {
                 _randomNumber2 = Random.Range(0, _totalOfEnemyChance);
-                Debug.Log(_randomNumber2);
                 for(int i = 0; i < enemyChance.Length; i++)
                 {
                     if (_randomNumber2 <= enemyChance[i])
