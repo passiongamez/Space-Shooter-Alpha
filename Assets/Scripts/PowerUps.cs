@@ -71,6 +71,9 @@ public class PowerUps : MonoBehaviour
                         _player.SecondaryPowerUp();
                         break;
                     case 6:
+                        _player.ActivateHomingMissile();
+                        break;
+                        case 7:
                         _player.Depower();
                         break;
                     default:

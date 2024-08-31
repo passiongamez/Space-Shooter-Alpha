@@ -283,7 +283,27 @@ public class Enemy : MonoBehaviour
                 _enemyCollider.enabled = false;
                 _fireOn = false;
                 Destroy(gameObject, 2.3f);
-                break;
+                break;             
+        }
+        if(other.tag == "Missile")
+        {
+            Missile missile = other.GetComponent<Missile>();
+            if (missile != null && missile.PlayerMissile() == true)
+            {
+                _player.AddScore(10);
+                if(_hasShield == true)
+                {
+                    _shield.SetActive(false);
+                    _hasShield = false;
+                }
+                _enemyAnim.SetTrigger("OnEnemyDeath");
+                _audioSource.PlayOneShot(_explosionClip);
+                _speed = 0;
+                _enemyCollider.enabled = false;
+                _fireOn = false;
+                Destroy(other.gameObject);
+                Destroy(gameObject, 2.3f);
+            }
         }
     }
 

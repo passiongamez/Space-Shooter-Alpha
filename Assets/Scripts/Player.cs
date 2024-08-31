@@ -39,12 +39,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject[] _visualDamage;
     [SerializeField] GameObject _gravitationalBelt;
+    [SerializeField] GameObject _homingProjectile;
 
     [SerializeField] bool _isTripeShotActive = false;
     [SerializeField] bool _isSpeedBoosted = false;
     [SerializeField] bool _isShieldActive = false;
     [SerializeField] bool _theBoomActive = false;
     [SerializeField] bool _isThrusterActive = false;
+    [SerializeField] bool _homingMissileActive = false;
 
     WaitForSeconds _powerUpCoolDownTimer = new WaitForSeconds(5f);
 
@@ -53,6 +55,7 @@ public class Player : MonoBehaviour
     GameManager _gameManager;
     MainCamera _mainCamera;
     PowerUps _powerups;
+    Missile _missile;
 
     SpriteRenderer _shieldColor;
 
@@ -63,7 +66,8 @@ public class Player : MonoBehaviour
         TripleShot,
         TheBoom,
         Shield,
-        Ammo
+        Ammo,
+        HomingMissile
     }
 
 
@@ -126,6 +130,11 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.B) && Time.time > _canFire && _theBoomActive == true)
         {
             FireTheBoom();
+        }
+
+        if (Input.GetKeyDown(KeyCode.N) && _homingMissileActive == true)
+        {
+            HomingMissile();
         }
 
     }
@@ -209,6 +218,7 @@ public class Player : MonoBehaviour
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount--;
         }
+
         if (_isTripeShotActive == true && _currentAmmoCount >= 3)
         {
             _canFire = Time.time + _fireRate;
@@ -379,10 +389,26 @@ public class Player : MonoBehaviour
         _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
     }
 
+    public void HomingMissile()
+    {
+        Vector3 offset = new Vector3(0, 2, 0);
+
+            GameObject fireMissile = Instantiate(_homingProjectile, transform.position + offset, Quaternion.identity);
+
+            _missile = fireMissile.GetComponent<Missile>();
+            _missile.IsPlayerMissile();
+            _homingMissileActive = false;
+    }
+
+    public void ActivateHomingMissile()
+    {
+        _homingMissileActive = true;
+    }
+
 
     public void Depower()
     {
-        PowerUps values = (PowerUps)Random.Range(0, 5);
+        PowerUps values = (PowerUps)Random.Range(0, 6);
         switch (values)
         {
             case PowerUps.Speed:
@@ -410,6 +436,9 @@ public class Player : MonoBehaviour
                     _currentAmmoCount = 0;
                 }
                 _uiManager.UpdateAmmoCount(_currentAmmoCount);
+                break;
+            case PowerUps.HomingMissile:
+                _homingMissileActive = false;
                 Debug.Log(values);
                 break;
             default:

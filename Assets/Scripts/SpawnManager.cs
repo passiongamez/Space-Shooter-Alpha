@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] int _waves = 0;
     [SerializeField] int _enemiesToSpawn = 1;
     [SerializeField] int _enemiesSpawned;
-    public int[] percent = { 21, 19, 15, 14, 12, 10, 9 };
+    public int[] percent = { 21, 19, 15, 14, 12, 8, 6, 5 };
     [SerializeField] int _totalOfPercent;
     [SerializeField] int _randomNumber;
     public int[] enemyChance = { 50, 30, 20 };

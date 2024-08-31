@@ -129,8 +129,22 @@ public class Destroyer : MonoBehaviour
             default:
                 break;
         }
+        if (other.tag == "Missile")
+        {
+            Missile missile = other.GetComponent<Missile>();
+            if (missile != null && missile.PlayerMissile() == true)
+            {
+                Instantiate(_explosion, transform.position, Quaternion.identity);
+                _player.AddScore(50);
+                _speed = 0;
+                _collider.enabled = false;
+                _fireOn = false;
+                Destroy(other.gameObject);
+                Destroy(gameObject);
+            }
+        }
 
-        if(_currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             Instantiate(_explosion, transform.position, Quaternion.identity);
             _player.AddScore(50);

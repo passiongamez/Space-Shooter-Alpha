@@ -12,6 +12,7 @@ TagManager:
   - EnemyLaser
   - The Boom
   - PowerUp
+  - Missile
   layers:
   - Default
   - TransparentFX
