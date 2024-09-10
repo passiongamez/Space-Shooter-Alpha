@@ -23,7 +23,6 @@ public class UIManager : MonoBehaviour
 
     WaitForSeconds _waveTextLength = new WaitForSeconds(2f);
 
-    // Start is called before the first frame update
     void Start()
     {
         _restartText.gameObject.SetActive(false);
@@ -52,13 +51,6 @@ public class UIManager : MonoBehaviour
         _ammoCountText.text = "x15";
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void UpdateScore(int playerScore)
     {
         _scoreText.text = "Score: " + playerScore;

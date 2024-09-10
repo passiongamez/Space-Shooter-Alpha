@@ -42,6 +42,4 @@ public class Asteroid : MonoBehaviour
             Destroy(gameObject, .7f);
         }
     }
-
-
 }

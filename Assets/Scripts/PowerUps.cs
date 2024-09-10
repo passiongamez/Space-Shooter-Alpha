@@ -13,7 +13,6 @@ public class PowerUps : MonoBehaviour
 
     [SerializeField] AudioClip _powerUpClip;
 
-    // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -29,7 +28,6 @@ public class PowerUps : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();

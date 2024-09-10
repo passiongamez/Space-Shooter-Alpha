@@ -210,13 +210,11 @@ public class Enemy : MonoBehaviour
     public void DodgeLeft()
     {
         transform.Translate(Vector3.left * (_speed * 10) * Time.deltaTime);
-        Debug.Log("added force left");
     }
 
     public void DodgeRight()
     {
         transform.Translate(Vector3.right * (_speed * 10) * Time.deltaTime);
-        Debug.Log("added force right");
     }
 
 
@@ -250,21 +248,21 @@ public class Enemy : MonoBehaviour
                 Destroy(other.gameObject);
                 if (_target != null)
                 {
-                    _player.AddScore(10);
-                }
-                if (_hasShield == true)
-                {
-                    _shield.SetActive(false);
-                    _hasShield = false;
-                }
-                else
-                {
-                    _enemyAnim.SetTrigger("OnEnemyDeath");
-                    _audioSource.PlayOneShot(_explosionClip);
-                    _speed = 0;
-                    _enemyCollider.enabled = false;
-                    _fireOn = false;
-                    Destroy(gameObject, 2.3f);
+                    if (_hasShield == true)
+                    {
+                        _shield.SetActive(false);
+                        _hasShield = false;
+                    }
+                    else
+                    {
+                        _player.AddScore(10);
+                        _enemyAnim.SetTrigger("OnEnemyDeath");
+                        _audioSource.PlayOneShot(_explosionClip);
+                        _speed = 0;
+                        _enemyCollider.enabled = false;
+                        _fireOn = false;
+                        Destroy(gameObject, 2.3f);
+                    }
                 }
                 break;
             case "Enemy Lasers":
@@ -273,38 +271,43 @@ public class Enemy : MonoBehaviour
                 Destroy(other.gameObject);
                 if (_target != null)
                 {
+                    if(_hasShield == true)
+                    {
+                        _shield.SetActive(false);
+                        _hasShield = false;
+                    }
                     _player.AddScore(10);
+                    _enemyAnim.SetTrigger("OnEnemyDeath");
+                    _audioSource.PlayOneShot(_explosionClip);
+                    _speed = 0;
+                    _enemyCollider.enabled = false;
+                    _fireOn = false;
+                    Destroy(gameObject, 2.3f);
                 }
-                _shield.SetActive(false);
-                _hasShield = false;
-                _enemyAnim.SetTrigger("OnEnemyDeath");
-                _audioSource.PlayOneShot(_explosionClip);
-                _speed = 0;
-                _enemyCollider.enabled = false;
-                _fireOn = false;
-                Destroy(gameObject, 2.3f);
-                break;             
-        }
-        if(other.tag == "Missile")
-        {
-            Missile missile = other.GetComponent<Missile>();
-            if (missile != null && missile.PlayerMissile() == true)
-            {
-                _player.AddScore(10);
-                if(_hasShield == true)
+                break;
+            case "Missile":
+                Missile missile = other.GetComponent<Missile>();
+                if (missile != null && missile.PlayerMissile() == true)
                 {
-                    _shield.SetActive(false);
-                    _hasShield = false;
+                    Destroy(other.gameObject);
+                    if (_hasShield == true)
+                    {
+                        _shield.SetActive(false);
+                        _hasShield = false;
+                    }
+                    _player.AddScore(10);
+                    _enemyAnim.SetTrigger("OnEnemyDeath");
+                    _audioSource.PlayOneShot(_explosionClip);
+                    _speed = 0;
+                    _enemyCollider.enabled = false;
+                    _fireOn = false;
+                    Destroy(gameObject, 2.3f);
                 }
-                _enemyAnim.SetTrigger("OnEnemyDeath");
-                _audioSource.PlayOneShot(_explosionClip);
-                _speed = 0;
-                _enemyCollider.enabled = false;
-                _fireOn = false;
-                Destroy(other.gameObject);
-                Destroy(gameObject, 2.3f);
-            }
-        }
+                break;
+             default:
+                break;
+
+        }     
     }
 
     void BackFire()

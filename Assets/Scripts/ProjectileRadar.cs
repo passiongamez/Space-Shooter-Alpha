@@ -27,19 +27,11 @@ public class ProjectileRadar : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Laser")
         {
             _randomDodgeChance = Random.Range(0, _totalDodgeChance);
-            Debug.Log(_randomDodgeChance);
             for (int i = 0; i < dodgeChance.Length; i++)
             {
                 if(_randomDodgeChance <= dodgeChance[i])
@@ -47,15 +39,12 @@ public class ProjectileRadar : MonoBehaviour
                     switch (i)
                     {
                         case 0:
-                            Debug.Log("return");
                             return;
                         case 1:
                             _enemy.DodgeLeft();
-                            Debug.Log("dodge left");
                             break;
                         case 2:
                             _enemy.DodgeRight();
-                            Debug.Log("dodge right");
                             break;
                         default:
                             break;

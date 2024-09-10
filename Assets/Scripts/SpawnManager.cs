@@ -14,6 +14,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] GameObject _enemyContainer;
 
     [SerializeField] GameObject[] _powerUps;
+    [SerializeField] GameObject _boss;
 
     [SerializeField] int _waves = 0;
     [SerializeField] int _enemiesToSpawn = 1;
@@ -107,60 +108,124 @@ public class SpawnManager : MonoBehaviour
         {
             yield return _waveTime;
             _waves++;
-            _enemiesToSpawn = _enemiesToSpawn + Random.Range(2, 3);
             _enemiesSpawned = 0;
             _uiManager.UpdateWave(_waves);
-            while (_enemiesSpawned < _enemiesToSpawn)
+            if(_waves % 5 == 0)
             {
-                _randomNumber2 = Random.Range(0, _totalOfEnemyChance);
-                for(int i = 0; i < enemyChance.Length; i++)
+                Vector3 bossSpawnPos = new Vector3(0, 16, 0);
+                _enemiesToSpawn = _waves;
+
+                GameObject boss = Instantiate(_boss, bossSpawnPos, Quaternion.identity);
+                boss.transform.parent = _enemyContainer.transform;
+
+                while (_enemiesSpawned < _enemiesToSpawn)
                 {
-                    if (_randomNumber2 <= enemyChance[i])
+                    _randomNumber2 = Random.Range(0, _totalOfEnemyChance);
+                    for (int i = 0; i < enemyChance.Length; i++)
                     {
-                        if (_movesRight == true)
+                        if (_randomNumber2 <= enemyChance[i])
                         {
-                            float xBounds = 15.5f;
-                            float yBounds = Random.Range(1, 8);
-                            Vector3 spawnPos = new Vector3(-xBounds, yBounds, 0);
+                            if (_movesRight == true)
+                            {
+                                float xBounds = 15.5f;
+                                float yBounds = Random.Range(1, 8);
+                                Vector3 spawnPos = new Vector3(-xBounds, yBounds, 0);
 
-                            GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
-                            newEnemy.transform.parent = _enemyContainer.transform;
-                        }
-                        else if (_movesLeft == true)
-                        {
-                            float xBounds = 15.5f;
-                            float yBounds = Random.Range(1, 8);
-                            Vector3 spawnPos = new Vector3(xBounds, yBounds, 0);
+                                GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+                            }
+                            else if (_movesLeft == true)
+                            {
+                                float xBounds = 15.5f;
+                                float yBounds = Random.Range(1, 8);
+                                Vector3 spawnPos = new Vector3(xBounds, yBounds, 0);
 
-                            GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
-                            newEnemy.transform.parent = _enemyContainer.transform;
-                        }
-                        else if (i == 2)
-                        {
-                            float yBound = Random.Range(1, 7);
-                            Vector3 startPos1 = new Vector3(15f, yBound, 0);
-                            Vector3 startPos2 = new Vector3(-15f, yBound, 0);
-                            Vector3[] startPos = { startPos1, startPos2 };
+                                GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+                            }
+                            else if (i == 2)
+                            {
+                                float yBound = Random.Range(1, 7);
+                                Vector3 startPos1 = new Vector3(15f, yBound, 0);
+                                Vector3 startPos2 = new Vector3(-15f, yBound, 0);
+                                Vector3[] startPos = { startPos1, startPos2 };
 
-                            GameObject newEnemy = Instantiate(_enemies[i], startPos[Random.Range(0, 2)], Quaternion.identity);
-                            newEnemy.transform.parent = _enemyContainer.transform;
+                                GameObject newEnemy = Instantiate(_enemies[i], startPos[Random.Range(0, 2)], Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+                            }
+                            else
+                            {
+                                Vector3 spawnPos = new Vector3(Random.Range(-15f, 15f), 11, 0);
+                                GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+
+                            }
+                            break;
                         }
                         else
                         {
-                            Vector3 spawnPos = new Vector3(Random.Range(-15f, 15f), 11, 0);
-                            GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
-                            newEnemy.transform.parent = _enemyContainer.transform;
-
+                            _randomNumber2 -= enemyChance[i];
                         }
-                        break;
                     }
-                    else
-                    {
-                        _randomNumber2 -= enemyChance[i];
-                    }
+                    _enemiesSpawned++;
+                    yield return _waitTime;
                 }
-                _enemiesSpawned++;
-                yield return _waitTime;
+            }
+            else
+            {
+                _enemiesToSpawn = _enemiesToSpawn + Random.Range(2, 5);
+                while (_enemiesSpawned < _enemiesToSpawn)
+                {
+                    _randomNumber2 = Random.Range(0, _totalOfEnemyChance);
+                    for (int i = 0; i < enemyChance.Length; i++)
+                    {
+                        if (_randomNumber2 <= enemyChance[i])
+                        {
+                            if (_movesRight == true)
+                            {
+                                float xBounds = 15.5f;
+                                float yBounds = Random.Range(1, 8);
+                                Vector3 spawnPos = new Vector3(-xBounds, yBounds, 0);
+
+                                GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+                            }
+                            else if (_movesLeft == true)
+                            {
+                                float xBounds = 15.5f;
+                                float yBounds = Random.Range(1, 8);
+                                Vector3 spawnPos = new Vector3(xBounds, yBounds, 0);
+
+                                GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+                            }
+                            else if (i == 2)
+                            {
+                                float yBound = Random.Range(1, 7);
+                                Vector3 startPos1 = new Vector3(15f, yBound, 0);
+                                Vector3 startPos2 = new Vector3(-15f, yBound, 0);
+                                Vector3[] startPos = { startPos1, startPos2 };
+
+                                GameObject newEnemy = Instantiate(_enemies[i], startPos[Random.Range(0, 2)], Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+                            }
+                            else
+                            {
+                                Vector3 spawnPos = new Vector3(Random.Range(-15f, 15f), 11, 0);
+                                GameObject newEnemy = Instantiate(_enemies[i], spawnPos, Quaternion.identity);
+                                newEnemy.transform.parent = _enemyContainer.transform;
+
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            _randomNumber2 -= enemyChance[i];
+                        }
+                    }
+                    _enemiesSpawned++;
+                    yield return _waitTime;
+                }
             }
             while (_enemyContainer.transform.childCount > 0)
             {
@@ -178,9 +243,9 @@ public class SpawnManager : MonoBehaviour
     {
         while(_onPlayerDeath == false)
         {
-            yield return new WaitForSeconds(5f);
             Vector3 spawnPos = new Vector3(Random.Range(-12f, 12f), 11, 0);
             Instantiate(_powerUps[3], spawnPos, Quaternion.identity);
+            yield return new WaitForSeconds(10f);
             break;
         }
     }

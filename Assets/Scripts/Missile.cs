@@ -15,7 +15,6 @@ public class Missile : MonoBehaviour
 
     Player _player;
 
-    // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -27,7 +26,6 @@ public class Missile : MonoBehaviour
         FindTarget();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();

@@ -22,6 +22,7 @@ public class Destroyer : MonoBehaviour
 
     [SerializeField] bool _movingLeft;
     bool _fireOn = true;
+    bool _isPlayerAlive = true;
 
     Movement _values;
 
@@ -65,8 +66,12 @@ public class Destroyer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
-        FireMissile();
+        if(_player.IsPlayerDeath() == false)
+        {
+            CalculateMovement();
+            FireMissile();
+        }
+
     }
 
     void CalculateMovement()
@@ -126,26 +131,26 @@ public class Destroyer : MonoBehaviour
                 break;
             case "Enemy Laser":
                 return;
-            default:
+            case "Missile":
+                Missile missile = other.GetComponent<Missile>();
+                if (missile != null && missile.PlayerMissile() == true)
+                {
+                    Instantiate(_explosion, transform.position, Quaternion.identity);
+                    _player.AddScore(50);
+                    _speed = 0;
+                    _collider.enabled = false;
+                    _fireOn = false;
+                    Destroy(other.gameObject);
+                    _currentHealth -= 10;
+                }
+                break;
+                    default:
                 break;
         }
-        if (other.tag == "Missile")
-        {
-            Missile missile = other.GetComponent<Missile>();
-            if (missile != null && missile.PlayerMissile() == true)
-            {
-                Instantiate(_explosion, transform.position, Quaternion.identity);
-                _player.AddScore(50);
-                _speed = 0;
-                _collider.enabled = false;
-                _fireOn = false;
-                Destroy(other.gameObject);
-                Destroy(gameObject);
-            }
-        }
 
-        if (_currentHealth <= 0)
+        if (_currentHealth < 0)
         {
+            _currentHealth = 0;
             Instantiate(_explosion, transform.position, Quaternion.identity);
             _player.AddScore(50);
             _speed = 0;
@@ -153,5 +158,10 @@ public class Destroyer : MonoBehaviour
             _fireOn = false;
             Destroy(gameObject, 1f);
         }
+    }
+
+    public void OnPlayerDeath()
+    {
+        _isPlayerAlive = false;
     }
 }

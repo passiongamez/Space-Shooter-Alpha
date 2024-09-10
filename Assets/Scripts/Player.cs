@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
     [SerializeField] bool _theBoomActive = false;
     [SerializeField] bool _isThrusterActive = false;
     [SerializeField] bool _homingMissileActive = false;
+    bool _isPlayerDead = false;
 
     WaitForSeconds _powerUpCoolDownTimer = new WaitForSeconds(5f);
 
@@ -54,7 +55,6 @@ public class Player : MonoBehaviour
     UIManager _uiManager;
     GameManager _gameManager;
     MainCamera _mainCamera;
-    PowerUps _powerups;
     Missile _missile;
 
     SpriteRenderer _shieldColor;
@@ -270,47 +270,60 @@ public class Player : MonoBehaviour
             else if (_shieldHP == 2)
             {
                 _shieldColor.color = Color.yellow;
+                return;
             }
             else if (_shieldHP == 1)
             {
                 _shieldColor.color = Color.red;
+                return;
             }
-            else if (_shieldHP <= 0)
+            else if (_shieldHP == 0)
             {
                 _shieldHP = 0;
                 _isShieldActive = false;
                 _shield.SetActive(false);
+                return;
+            }
+            else if (_shieldHP < 0)
+            {
+                _isShieldActive = false;
+                _shield.SetActive(false);
+                damage = _shieldHP * -1;
+                _shieldHP = 0;
             }
         }
-        else
-        {
+
             _currentHP -= damage;
             _mainCamera.CameraShake();
+            HPDamage();
             _uiManager.UpdateLives(_currentHP);
-            if (_currentHP == 2)
-            {
-                _visualDamage[Random.Range(0, 2)].SetActive(true);
-            }
 
-            if (_currentHP == 1 && _visualDamage[0].activeInHierarchy)
-            {
-                _visualDamage[1].SetActive(true);
-            }
-            else if (_currentHP == 1 && _visualDamage[1].activeInHierarchy)
-            {
-                _visualDamage[0].SetActive(true);
-            }
-            if (_currentHP <= 0)
-            {
-                _currentHP = 0;
-                AudioSource.PlayClipAtPoint(_explosionClip, transform.position, 1f);
-                _gameManager.GameOver();
-                _spawnManager.OnPlayerDeath();
-                Destroy(gameObject);
-            }
+    }
+
+    void HPDamage()
+    {
+        if (_currentHP == 2)
+        {
+            _visualDamage[Random.Range(0, 2)].SetActive(true);
         }
 
-
+        if (_currentHP == 1 && _visualDamage[0].activeInHierarchy)
+        {
+            _visualDamage[1].SetActive(true);
+        }
+        else if (_currentHP == 1 && _visualDamage[1].activeInHierarchy)
+        {
+            _visualDamage[0].SetActive(true);
+        }
+        if (_currentHP <= 0)
+        {
+            _currentHP = 0;
+            AudioSource.PlayClipAtPoint(_explosionClip, transform.position, 1f);
+            _gameManager.GameOver();
+            _spawnManager.OnPlayerDeath();
+            PlayerDeath();
+            Destroy(gameObject);
+        }
     }
 
     public void ActivateTripleShot()
@@ -444,6 +457,16 @@ public class Player : MonoBehaviour
             default:
                 return;
         }
+    }
+
+    void PlayerDeath()
+    {
+        _isPlayerDead = true;
+    }
+
+    public bool IsPlayerDeath()
+    {
+        return _isPlayerDead;
     }
 }
 
