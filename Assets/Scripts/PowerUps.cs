@@ -79,10 +79,9 @@ public class PowerUps : MonoBehaviour
 
     public void ActivateGravityForce()
     {
-        GameObject player = GameObject.Find("Player");
-        Vector3 playerPos = player.transform.position;
+        Vector3 playerPos = _player.transform.position;
         Vector3 currentPos = transform.position;
 
-        Vector3.MoveTowards(currentPos, playerPos, (_speed + 3) * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(currentPos, playerPos, (_speed + 3) * Time.deltaTime);
     }
 }

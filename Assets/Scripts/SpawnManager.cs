@@ -235,16 +235,14 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void AmmoSpawn()
+    public IEnumerator SpawnAmmo()
     {
-        StartCoroutine(SpawnAmmo());
-    }
-
-    IEnumerator SpawnAmmo()
-    {
+        while (true)
+        {
             Vector3 spawnPos = new Vector3(Random.Range(-12f, 12f), 11, 0);
             Instantiate(_powerUps[3], spawnPos, Quaternion.identity);
             yield return _ammoSpawnWait;
+        }
     }
 }
 

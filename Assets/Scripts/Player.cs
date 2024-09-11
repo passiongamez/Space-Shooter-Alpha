@@ -61,6 +61,8 @@ public class Player : MonoBehaviour
 
     SpriteRenderer _shieldColor;
 
+    Coroutine _ammoSpawn;
+
     public enum PowerUps
     {
         Speed,
@@ -218,6 +220,10 @@ public class Player : MonoBehaviour
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount -= 3;
+            if (_currentAmmoCount <= 1)
+            {
+                _ammoSpawn = StartCoroutine(_spawnManager.SpawnAmmo());
+            }
         }
         else if(_currentAmmoCount > 0)
         {
@@ -225,11 +231,10 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + _offset, Quaternion.identity);
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount--;
-        }
-
-        if (_currentAmmoCount == 0)
-        {
-            _spawnManager.AmmoSpawn();
+            if (_currentAmmoCount == 1)
+            {
+                _ammoSpawn = StartCoroutine(_spawnManager.SpawnAmmo());
+            }
         }
         _uiManager.UpdateAmmoCount(_currentAmmoCount);
     }
@@ -361,6 +366,7 @@ public class Player : MonoBehaviour
     public void AmmoRefill()
     {
         _currentAmmoCount = _startingAmmo;
+        StopCoroutine(_ammoSpawn);
         _uiManager.UpdateAmmoCount(_currentAmmoCount);
     }
 
