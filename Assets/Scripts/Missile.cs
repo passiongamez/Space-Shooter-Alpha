@@ -17,11 +17,7 @@ public class Missile : MonoBehaviour
 
     void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<Player>();
-        if(_player == null)
-        {
-            Debug.LogError("Player is null");
-        }
+        _closestDistance = 100f;
 
         FindTarget();
     }
@@ -54,8 +50,6 @@ public class Missile : MonoBehaviour
 
     public void FindTarget()
     {
-        float _closestDistance = 100f; 
-
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach(var enemy in enemies)
         {
@@ -87,9 +81,13 @@ public class Missile : MonoBehaviour
     {
         if(other.tag == "Player" && _isPlayerMissile == false)
         {
-            _player.Damage(2);
-            Instantiate(_explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            _player = GameObject.Find("Player").GetComponent<Player>();
+            if (_player != null)
+            {
+                _player.Damage(2);
+                Instantiate(_explosion, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+            }
         }
     }
 

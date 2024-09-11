@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UIElements.Experimental;
@@ -56,9 +57,9 @@ public class Player : MonoBehaviour
     GameManager _gameManager;
     MainCamera _mainCamera;
     Missile _missile;
+    PowerUps _powerups;
 
     SpriteRenderer _shieldColor;
-
 
     public enum PowerUps
     {
@@ -211,14 +212,6 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        if (_isTripeShotActive == false && _currentAmmoCount >= 1)
-        {
-            _canFire = Time.time + _fireRate;
-            Instantiate(_laserPrefab, transform.position + _offset, Quaternion.identity);
-            _audioSource.PlayOneShot(_laserClip);
-            _currentAmmoCount--;
-        }
-
         if (_isTripeShotActive == true && _currentAmmoCount >= 3)
         {
             _canFire = Time.time + _fireRate;
@@ -226,7 +219,7 @@ public class Player : MonoBehaviour
             _audioSource.PlayOneShot(_laserClip);
             _currentAmmoCount -= 3;
         }
-        else if(_isTripeShotActive == true && _currentAmmoCount < 3 && _currentAmmoCount > 0)
+        else if(_currentAmmoCount > 0)
         {
             _canFire = Time.time + _fireRate;
             Instantiate(_laserPrefab, transform.position + _offset, Quaternion.identity);
@@ -400,6 +393,7 @@ public class Player : MonoBehaviour
         _theBoomActive = true;
         _theBoomAmmoCount = 3;
         _uiManager.BoomAmmoUpdate(_theBoomAmmoCount);
+        StartCoroutine(_uiManager.TheBoomTutorial());
     }
 
     public void HomingMissile()
@@ -416,6 +410,7 @@ public class Player : MonoBehaviour
     public void ActivateHomingMissile()
     {
         _homingMissileActive = true;
+        _uiManager.HomingMissileTutorial();
     }
 
 
@@ -452,7 +447,6 @@ public class Player : MonoBehaviour
                 break;
             case PowerUps.HomingMissile:
                 _homingMissileActive = false;
-                Debug.Log(values);
                 break;
             default:
                 return;

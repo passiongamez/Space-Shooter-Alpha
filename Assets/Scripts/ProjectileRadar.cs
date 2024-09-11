@@ -6,7 +6,7 @@ public class ProjectileRadar : MonoBehaviour
 {
     Enemy _enemy;
 
-    public int[] dodgeChance = { 80, 11, 9 };
+    int[] dodgeChance = { 80, 11, 9 };
 
     int _totalDodgeChance;
     [SerializeField] int _randomDodgeChance;

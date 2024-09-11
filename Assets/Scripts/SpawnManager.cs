@@ -10,6 +10,7 @@ public class SpawnManager : MonoBehaviour
     WaitForSeconds _waitTime = new WaitForSeconds(2f);
     WaitForSeconds _waveTime = new WaitForSeconds(3f);
     WaitForSeconds _destroyerWait = new WaitForSeconds(3);
+    WaitForSeconds _ammoSpawnWait = new WaitForSeconds(10f);
 
     [SerializeField] GameObject _enemyContainer;
 
@@ -241,13 +242,9 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnAmmo()
     {
-        while(_onPlayerDeath == false)
-        {
             Vector3 spawnPos = new Vector3(Random.Range(-12f, 12f), 11, 0);
             Instantiate(_powerUps[3], spawnPos, Quaternion.identity);
-            yield return new WaitForSeconds(10f);
-            break;
-        }
+            yield return _ammoSpawnWait;
     }
 }
 

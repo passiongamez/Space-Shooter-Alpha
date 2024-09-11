@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
@@ -39,6 +38,12 @@ public class Boss : MonoBehaviour
     [SerializeField] GameObject[] _lasers;
     [SerializeField] GameObject _missile;
     [SerializeField] GameObject _bigCannon;
+
+    Vector3[] explosionPoints = { new Vector3(-6, 5, 0), new Vector3(6, 5, 0), new Vector3(-.37f, 6, 0), new Vector3(-5.5f, 6, 0), new Vector3(5.5f, 6, 0) };
+    Vector3 laserPosition1 = new Vector3(4.34f, 2, 0);
+    Vector3 laserPosition2 = new Vector3(-5.2f, 2, 0);
+    Vector3[] spawnDrops = { new Vector3(-5.3f, 6.5f, 0), new Vector3(5.3f, 6.5f, 0) };
+    Vector3 bigCannonOffset = new Vector3(-.4f, -9, 0);
 
     Player _player;
     Laser _laser;
@@ -143,8 +148,6 @@ public class Boss : MonoBehaviour
 
     IEnumerator ExplosionFinale()
     {
-        Vector3[] explosionPoints = { new Vector3(-6, 5, 0), new Vector3(6, 5, 0), new Vector3(-.37f, 6, 0), new Vector3(-5.5f, 6, 0), new Vector3(5.5f, 6, 0) };
-
         while (true)
         {
             Vector3 randomPoint = explosionPoints[Random.Range(0, explosionPoints.Length)];
@@ -155,9 +158,6 @@ public class Boss : MonoBehaviour
 
     void FireLasers()
     {
-        Vector3 laserPosition1 = new Vector3(4.34f, 2, 0);
-        Vector3 laserPosition2 = new Vector3(-5.2f, 2, 0);
-
         if(Time.time > _canFireLaser)
         {
             _fireRateLaser = Random.Range(2, 4);
@@ -174,10 +174,9 @@ public class Boss : MonoBehaviour
 
     void DropMissiles()
     {
-        Vector3[] spawnDrops = { new Vector3(-5.3f, 6.5f, 0), new Vector3(5.3f, 6.5f, 0) };
         Vector3 randomSpawn = spawnDrops[Random.Range(0, spawnDrops.Length)];
 
-       if(Time.time > _canFireMissile)
+        if (Time.time > _canFireMissile)
         {
             _missileFireRate = Random.Range(5, 11);
             _canFireMissile = Time.time + _missileFireRate;
@@ -187,7 +186,6 @@ public class Boss : MonoBehaviour
 
     IEnumerator BigCannon()
     {
-        Vector3 bigCannonOffset = new Vector3(-.4f, -9, 0);
         WaitForSeconds bigCannonWait = new WaitForSeconds(Random.Range(20f, 40f));
 
         _audioSource.PlayOneShot(_chargeClip1, 1f);

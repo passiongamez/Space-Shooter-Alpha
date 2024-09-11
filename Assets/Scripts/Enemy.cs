@@ -33,12 +33,18 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] GameObject _shield;
 
+    Vector3 _position;
+    Vector3 _targetPos;
+
+    float _yPos;
+    float _yTarget;
+
     EnemyMovement values;
 
     SpawnManager _spawnManager;
 
 
-    public enum EnemyMovement
+    enum EnemyMovement
     {
         StraightDown,
         MoveLeft,
@@ -86,8 +92,6 @@ public class Enemy : MonoBehaviour
         }
 
        values = (EnemyMovement)Random.Range(0, 5);
-
-        
     }
 
 
@@ -100,11 +104,10 @@ public class Enemy : MonoBehaviour
 
     void CalculateMovement()
     {
-        Vector3 position = transform.position;
-        Vector3 targetPos = _target.transform.position;
+        Vector3 _position = transform.position;
+        Vector3 _targetPos = _target.transform.position;
 
-
-        if (Vector3.Distance(position, targetPos) <= 5)
+        if (Vector3.Distance(_position, _targetPos) <= 5)
         {
             transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _speed * Time.deltaTime);
         }
@@ -235,13 +238,8 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
-                    _enemyAnim.SetTrigger("OnEnemyDeath");
-                    _audioSource.PlayOneShot(_explosionClip);
                     _player.AddScore(10);
-                    _speed = 0;
-                    _enemyCollider.enabled = false;
-                    _fireOn = false;
-                    Destroy(gameObject, 2.3f);
+                    DeathSequence();
                 }
                 break;
             case "Laser":
@@ -256,12 +254,7 @@ public class Enemy : MonoBehaviour
                     else
                     {
                         _player.AddScore(10);
-                        _enemyAnim.SetTrigger("OnEnemyDeath");
-                        _audioSource.PlayOneShot(_explosionClip);
-                        _speed = 0;
-                        _enemyCollider.enabled = false;
-                        _fireOn = false;
-                        Destroy(gameObject, 2.3f);
+                        DeathSequence();
                     }
                 }
                 break;
@@ -277,12 +270,7 @@ public class Enemy : MonoBehaviour
                         _hasShield = false;
                     }
                     _player.AddScore(10);
-                    _enemyAnim.SetTrigger("OnEnemyDeath");
-                    _audioSource.PlayOneShot(_explosionClip);
-                    _speed = 0;
-                    _enemyCollider.enabled = false;
-                    _fireOn = false;
-                    Destroy(gameObject, 2.3f);
+                    DeathSequence();
                 }
                 break;
             case "Missile":
@@ -296,18 +284,23 @@ public class Enemy : MonoBehaviour
                         _hasShield = false;
                     }
                     _player.AddScore(10);
-                    _enemyAnim.SetTrigger("OnEnemyDeath");
-                    _audioSource.PlayOneShot(_explosionClip);
-                    _speed = 0;
-                    _enemyCollider.enabled = false;
-                    _fireOn = false;
-                    Destroy(gameObject, 2.3f);
+                    DeathSequence();
                 }
                 break;
              default:
                 break;
 
         }     
+    }
+
+    void DeathSequence()
+    {
+        _enemyAnim.SetTrigger("OnEnemyDeath");
+        _audioSource.PlayOneShot(_explosionClip);
+        _speed = 0;
+        _enemyCollider.enabled = false;
+        _fireOn = false;
+        Destroy(gameObject, 2.3f);
     }
 
     void BackFire()
@@ -338,15 +331,14 @@ public class Enemy : MonoBehaviour
 
     void FireLaser()
     {
-        float yPos = transform.position.y;
-        float yTarget = _target.transform.position.y;
+        float _yPos = transform.position.y;
+        float _yTarget = _target.transform.position.y;
 
-
-        if(yPos < yTarget)
+        if (_yPos < _yTarget)
         {
             BackFire();
         }
-        else if(yPos >= yTarget)
+        else if(_yPos >= _yTarget)
         {
             if (Time.time > _canFire && _fireOn == true)
             {

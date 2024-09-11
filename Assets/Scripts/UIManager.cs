@@ -14,6 +14,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text _boomAmmoText;
     [SerializeField] Text _fuelText;
     [SerializeField] Text _waveText;
+    [SerializeField] Text _homingMissileInstructions;
+    [SerializeField] Text _theBoomInstructions;
+    [SerializeField] Text _shootInstructions;
+    [SerializeField] Text _movementInstructions;
+    [SerializeField] Text _powerUpInstructions;
+    [SerializeField] Text _thrusterInstructions;
+    [SerializeField] Text _finalInstructions;
 
     [SerializeField] Image _livesIMG;
     [SerializeField] Image _boomAmmo;
@@ -22,6 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Sprite[] _livesDisplay;
 
     WaitForSeconds _waveTextLength = new WaitForSeconds(2f);
+    WaitForSeconds _tutorialTextLength = new WaitForSeconds(3f);
 
     void Start()
     {
@@ -49,6 +57,8 @@ public class UIManager : MonoBehaviour
         _boomAmmoText.text = "";
 
         _ammoCountText.text = "x15";
+
+        StartCoroutine(StartInstructions());
 
     }
     public void UpdateScore(int playerScore)
@@ -114,5 +124,41 @@ public class UIManager : MonoBehaviour
     {
         yield return _waveTextLength;
         _waveText.text = "";
+    }
+
+    public IEnumerator HomingMissileTutorial()
+    {
+        _homingMissileInstructions.gameObject.SetActive(true);
+        yield return _waveTextLength;
+        _homingMissileInstructions.gameObject.SetActive(false);
+    }
+
+    public IEnumerator TheBoomTutorial()
+    {
+        _theBoomInstructions.gameObject.SetActive(true);
+        yield return _waveTextLength;
+        _theBoomInstructions.gameObject.SetActive(false);
+    }
+
+    public IEnumerator StartInstructions()
+    {
+        yield return _tutorialTextLength;
+        _movementInstructions.gameObject.SetActive(false);
+        yield return _tutorialTextLength;
+        _thrusterInstructions.gameObject.SetActive(true);
+        yield return _tutorialTextLength;
+        _thrusterInstructions.gameObject.SetActive(false);
+        yield return _tutorialTextLength;
+        _powerUpInstructions.gameObject.SetActive(true);
+        yield return _tutorialTextLength;
+        _powerUpInstructions.gameObject.SetActive(false);
+        yield return _tutorialTextLength;
+        _shootInstructions.gameObject.SetActive(true);
+        yield return _tutorialTextLength;
+        _shootInstructions.gameObject.SetActive(false);
+        yield return _tutorialTextLength;
+        _finalInstructions.gameObject.SetActive(true);
+        yield return _tutorialTextLength;
+        _finalInstructions.gameObject.SetActive(false);
     }
 }

@@ -9,7 +9,6 @@ public class PowerUps : MonoBehaviour
     [SerializeField] int _powerUpID;
 
     Player _player;
-    GravitationalBelt _gravitationalBelt;
 
     [SerializeField] AudioClip _powerUpClip;
 
@@ -19,12 +18,6 @@ public class PowerUps : MonoBehaviour
         if (_player == null)
         {
             Debug.LogError("Player is null");
-        }
-
-        _gravitationalBelt = GameObject.Find("Player").GetComponentInChildren<GravitationalBelt>();
-        if (_gravitationalBelt == null)
-        {
-            Debug.LogError("Gravitational belt is null");
         }
     }
 

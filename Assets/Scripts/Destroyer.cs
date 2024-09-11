@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Destroyer : MonoBehaviour
@@ -40,10 +39,6 @@ public class Destroyer : MonoBehaviour
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
-        if ( _player == null)
-        {
-            Debug.LogError("Player is null");
-        }
 
         _collider = GetComponent<Collider2D>();
         if( _collider == null)
@@ -118,7 +113,11 @@ public class Destroyer : MonoBehaviour
         switch(other.tag)
         {
             case "Player":
-                _player.Damage(1);
+
+                if (_player != null)
+                {
+                    _player.Damage(1);
+                }
                 _currentHealth--;
                 break;
             case "Laser":

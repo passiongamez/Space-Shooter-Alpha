@@ -14,12 +14,7 @@ public class Laser : MonoBehaviour
 
     void Start()
     {
-       _player = GameObject.Find("Player").GetComponent<Player>();
 
-        if(_player == null)
-        {
-            Debug.LogError("Player is null");
-        }
     }
 
   
@@ -71,8 +66,13 @@ public class Laser : MonoBehaviour
     {
         if(_isEnemyLaser == true && other.tag == "Player")
         {
-            _player.Damage(1);
-            Destroy(gameObject);
+            _player = GameObject.Find("Player").GetComponent<Player>();
+
+            if (_player != null)
+            {
+                _player.Damage(1);
+                Destroy(gameObject);
+            }
         }   
         if(_isEnemyLaser == true && other.tag == "PowerUp")
         {
